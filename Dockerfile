@@ -4,6 +4,14 @@ FROM node:18-alpine as build
 # Set working directory
 WORKDIR /app
 
+# Set environment variables for build
+ARG REACT_APP_VISION_API_ENDPOINT
+ARG REACT_APP_GOOGLE_CLOUD_API_KEY
+
+# Set environment variables for runtime
+ENV REACT_APP_VISION_API_ENDPOINT=$REACT_APP_VISION_API_ENDPOINT
+ENV REACT_APP_GOOGLE_CLOUD_API_KEY=$REACT_APP_GOOGLE_CLOUD_API_KEY
+
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
