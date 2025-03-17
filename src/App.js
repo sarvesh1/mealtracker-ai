@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -9,6 +9,7 @@ import Header from './components/Header';
 import Navigation from './components/Navigation';
 import Dashboard from './components/Dashboard';
 import PhotoUpload from './components/PhotoUpload';
+import FoodRecognition from './components/FoodRecognition';
 import MealLog from './components/MealLog';
 
 // Create a theme
@@ -36,6 +37,18 @@ const theme = createTheme({
 });
 
 function App() {
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [recognizedFoods, setRecognizedFoods] = useState([]);
+
+  const handleImageSelect = (file) => {
+    setSelectedImage(file);
+    setRecognizedFoods([]);
+  };
+
+  const handleRecognitionComplete = (foods) => {
+    setRecognizedFoods(foods);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -47,7 +60,20 @@ function App() {
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
               <Routes>
                 <Route path="/" element={<Dashboard />} />
-                <Route path="/upload" element={<PhotoUpload />} />
+                <Route 
+                  path="/upload" 
+                  element={
+                    <Box>
+                      <PhotoUpload onImageSelect={handleImageSelect} />
+                      {selectedImage && (
+                        <FoodRecognition 
+                          imageFile={selectedImage}
+                          onRecognitionComplete={handleRecognitionComplete}
+                        />
+                      )}
+                    </Box>
+                  } 
+                />
                 <Route path="/meals" element={<MealLog />} />
               </Routes>
             </Box>
