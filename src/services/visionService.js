@@ -1,8 +1,21 @@
 const VISION_API_ENDPOINT = process.env.REACT_APP_VISION_API_ENDPOINT;
 const API_KEY = process.env.REACT_APP_GOOGLE_CLOUD_API_KEY;
 
+// Add validation for environment variables
+if (!VISION_API_ENDPOINT) {
+  console.error('REACT_APP_VISION_API_ENDPOINT is not defined');
+}
+if (!API_KEY) {
+  console.error('REACT_APP_GOOGLE_CLOUD_API_KEY is not defined');
+}
+
 export const analyzeFoodImage = async (imageFile) => {
   try {
+    // Validate environment variables
+    if (!VISION_API_ENDPOINT || !API_KEY) {
+      throw new Error('Missing required environment variables for Vision API');
+    }
+
     // Convert image to base64
     const base64Image = await convertToBase64(imageFile);
     
@@ -23,6 +36,9 @@ export const analyzeFoodImage = async (imageFile) => {
       ]
     };
 
+    // Log the API endpoint (without the key)
+    console.log('Making request to Vision API endpoint:', VISION_API_ENDPOINT);
+
     // Make API request
     const response = await fetch(`${VISION_API_ENDPOINT}?key=${API_KEY}`, {
       method: 'POST',
@@ -33,7 +49,13 @@ export const analyzeFoodImage = async (imageFile) => {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to analyze image');
+      const errorData = await response.json().catch(() => ({}));
+      console.error('Vision API error:', {
+        status: response.status,
+        statusText: response.statusText,
+        error: errorData
+      });
+      throw new Error(`Failed to analyze image: ${response.statusText}`);
     }
 
     const data = await response.json();
