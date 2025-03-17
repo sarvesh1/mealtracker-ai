@@ -4,7 +4,12 @@ console.log('Environment check:', {
   API_KEY: process.env.REACT_APP_GOOGLE_CLOUD_API_KEY ? 'defined' : 'undefined',
   NODE_ENV: process.env.NODE_ENV,
   PUBLIC_URL: process.env.PUBLIC_URL,
-  allEnvVars: Object.keys(process.env)
+  allEnvVars: Object.keys(process.env),
+  // Add direct access to environment variables
+  directAccess: {
+    visionEndpoint: process.env.REACT_APP_VISION_API_ENDPOINT,
+    apiKey: process.env.REACT_APP_GOOGLE_CLOUD_API_KEY ? 'present' : 'missing'
+  }
 });
 
 const VISION_API_ENDPOINT = process.env.REACT_APP_VISION_API_ENDPOINT;

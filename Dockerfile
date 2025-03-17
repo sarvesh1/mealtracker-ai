@@ -4,14 +4,6 @@ FROM node:18-alpine as build
 # Set working directory
 WORKDIR /app
 
-# Set environment variables for build
-ARG REACT_APP_VISION_API_ENDPOINT
-ARG REACT_APP_GOOGLE_CLOUD_API_KEY
-
-# Set environment variables for runtime
-ENV REACT_APP_VISION_API_ENDPOINT=$REACT_APP_VISION_API_ENDPOINT
-ENV REACT_APP_GOOGLE_CLOUD_API_KEY=$REACT_APP_GOOGLE_CLOUD_API_KEY
-
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
@@ -22,11 +14,14 @@ COPY public/ public/
 COPY .env.production .env.production
 
 # Install dependencies
-##RUN npm ci
 RUN npm install
 
 # Copy all files
 COPY . .
+
+# Set environment variables for build
+ENV REACT_APP_VISION_API_ENDPOINT=https://vision.googleapis.com/v1/images:annotate
+ENV REACT_APP_GOOGLE_CLOUD_API_KEY=AIzaSyASG77GAALjVqvLNnJvcJLub2Pn1HUS-r0
 
 # Build the app
 RUN npm run build
