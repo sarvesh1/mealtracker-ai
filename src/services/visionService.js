@@ -1,3 +1,12 @@
+// Log all environment variables at startup (without exposing sensitive data)
+console.log('Environment check:', {
+  VISION_API_ENDPOINT: process.env.REACT_APP_VISION_API_ENDPOINT ? 'defined' : 'undefined',
+  API_KEY: process.env.REACT_APP_GOOGLE_CLOUD_API_KEY ? 'defined' : 'undefined',
+  NODE_ENV: process.env.NODE_ENV,
+  PUBLIC_URL: process.env.PUBLIC_URL,
+  allEnvVars: Object.keys(process.env)
+});
+
 const VISION_API_ENDPOINT = process.env.REACT_APP_VISION_API_ENDPOINT;
 const API_KEY = process.env.REACT_APP_GOOGLE_CLOUD_API_KEY;
 

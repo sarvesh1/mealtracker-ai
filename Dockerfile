@@ -18,6 +18,9 @@ COPY package*.json ./
 # Copy public
 COPY public/ public/
 
+# Copy .env.production first
+COPY .env.production .env.production
+
 # Install dependencies
 ##RUN npm ci
 RUN npm install
