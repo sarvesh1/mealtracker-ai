@@ -10,18 +10,19 @@ COPY package*.json ./
 # Copy public
 COPY public/ public/
 
-# Copy .env.production first
-COPY .env.production .env.production
-
 # Install dependencies
 RUN npm install
 
 # Copy all files
 COPY . .
 
-# Set environment variables for build
-ENV REACT_APP_VISION_API_ENDPOINT=https://vision.googleapis.com/v1/images:annotate
-ENV REACT_APP_GOOGLE_CLOUD_API_KEY=AIzaSyASG77GAALjVqvLNnJvcJLub2Pn1HUS-r0
+# Set build arguments
+ARG REACT_APP_VISION_API_ENDPOINT
+ARG REACT_APP_GOOGLE_CLOUD_API_KEY
+
+# Set environment variables for build time
+ENV REACT_APP_VISION_API_ENDPOINT=${REACT_APP_VISION_API_ENDPOINT}
+ENV REACT_APP_GOOGLE_CLOUD_API_KEY=${REACT_APP_GOOGLE_CLOUD_API_KEY}
 
 # Build the app
 RUN npm run build
